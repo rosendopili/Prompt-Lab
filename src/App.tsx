@@ -158,11 +158,11 @@ export default function App() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background text-foreground font-sans p-6 md:p-10 flex flex-col max-w-[1024px] mx-auto">
+      <div className="min-h-screen bg-background text-foreground font-sans p-4 md:p-10 flex flex-col w-full max-w-[1024px] mx-auto">
         
         {/* Header */}
-        <header className="flex justify-between items-end mb-10 border-b-2 border-foreground pb-3">
-          <h1 className="text-[42px] font-black uppercase tracking-tighter leading-none">
+        <header className="flex flex-wrap justify-between items-end mb-10 border-b-2 border-foreground pb-3 gap-4">
+          <h1 className="text-2xl md:text-[42px] font-black uppercase tracking-tighter leading-none break-words">
             PROMPT LAB
           </h1>
           <div className="font-mono text-sm font-bold uppercase">
@@ -171,7 +171,7 @@ export default function App() {
         </header>
 
         {/* Main Buckets */}
-        <main className="grid grid-cols-1 md:grid-cols-3 gap-8 flex-grow">
+        <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
           
           {/* Bucket 1: Subject */}
           <BucketCard 
@@ -273,7 +273,7 @@ interface BucketCardProps {
 function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle }: BucketCardProps) {
   return (
     <div className={cn(
-      "bg-white border-2 border-foreground shadow-brutal flex flex-col p-6 relative group transition-opacity duration-300",
+      "bg-white border-2 border-foreground shadow-brutal flex flex-col p-6 relative group transition-opacity duration-300 min-w-0",
       !enabled && "opacity-50"
     )}>
       {/* Geometric Decoration */}
@@ -282,13 +282,13 @@ function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle
         enabled ? "bg-primary" : "bg-muted-foreground"
       )} />
       
-      <div className="font-mono text-xs uppercase mb-6 flex items-center justify-between font-bold">
+      <div className="font-mono text-xs uppercase mb-6 flex flex-wrap items-center justify-between gap-2 font-bold">
         <div className="flex items-center gap-2">
           <span className={cn("w-2.5 h-2.5 rounded-full", enabled ? "bg-foreground" : "bg-muted-foreground")} />
           {id}_{title}
         </div>
         {onToggle && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <span className={cn(
               "text-[10px] font-bold tracking-widest transition-colors duration-300",
               enabled ? "text-primary" : "text-muted-foreground"
