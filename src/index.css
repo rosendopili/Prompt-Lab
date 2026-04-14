@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@theme inline {
+    --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+    
+    --color-background: #F8F9FA;
+    --color-foreground: #1A1A1A;
+    --color-primary: #3E51FF;
+    --color-primary-foreground: #FFFFFF;
+    
+    --color-card: #FFFFFF;
+    --color-card-foreground: #1A1A1A;
+    
+    --color-border: #1A1A1A;
+    
+    --shadow-brutal: 4px 4px 0px #1A1A1A;
+}
+
+:root {
+    --background: #F8F9FA;
+    --foreground: #1A1A1A;
+    --card: #FFFFFF;
+    --card-foreground: #1A1A1A;
+    --primary: #3E51FF;
+    --primary-foreground: #FFFFFF;
+    --border: #1A1A1A;
+    --radius: 0px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .clip-triangle {
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+  }
+}
