@@ -2,19 +2,35 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# PROMPT LAB
 
-This contains everything you need to run your app locally.
+Prompt Lab is a multi-purpose prompt engineering tool designed to help you generate high-quality AI prompts for creative art and business innovation.
 
-View your app in AI Studio: https://ai.studio/apps/0eb4e001-9db0-4dad-ad0c-9f49c0574911
+## 🚀 Features
 
-## Run Locally
+- **Multi-Mode Support**: Switch between **Creative Suite** for art prompts and **Business Generator** for startup ideas.
+- **Dynamic Randomization**: Roll individual "buckets" or randomize everything at once to find the perfect combination.
+- **Brutalist UI**: A clean, high-contrast interface with dynamic color-coded themes (Blue for Creative, Teal for Business).
+- **Clipboard Integration**: One-click copying of compiled prompts ready for use in Gemini, ChatGPT, or Midjourney.
+
+## 🛠️ How to Use
+
+1. **Select Your Mode**: Use the dropdown menu in the top-right corner to choose between "Creative Suite" or "Business Generator".
+2. **Customize Buckets**: Toggle the "Active/Inactive" switches to include or exclude specific data points from your prompt.
+3. **Roll the Dice**: Click the "ROLL" buttons on individual cards to randomize that specific bucket, or use "RANDOMIZE ALL" to refresh everything.
+4. **Copy & Prompt**: Once you like the compiled prompt in the footer, click "COPY TO CLIPBOARD" and paste it into your favorite AI tool.
+
+## 💻 Development
+
+### Run Locally
 
 **Prerequisites:**  Node.js
 
-
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Run the app:
    `npm run dev`
+
+### Deployment
+
+The app is configured for automatic deployment to GitHub Pages. Simply push changes to the `main` branch to trigger the build and deploy workflow.
