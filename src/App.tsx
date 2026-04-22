@@ -3,143 +3,70 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  RefreshCw, 
-  Sparkles, 
-  Copy, 
-  Check, 
-  Shuffle, 
-  Image as ImageIcon, 
-  Palette, 
-  Zap,
-  Dices
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-
-// Data for the buckets
-const SUBJECTS = [
-  "A majestic dragon",
-  "A futuristic space station",
-  "A vintage typewriter",
-  "A cozy cabin in the woods",
-  "A giant friendly robot",
-  "A curious red fox",
-  "A bustling street market in Tokyo",
-  "An ancient Greek temple",
-  "A floating island with waterfalls",
-  "A high-tech laboratory",
-  "A magical library with flying books",
-  "A sleek electric supercar",
-  "A peaceful zen garden",
-  "A medieval knight in shining armor",
-  "A group of penguins wearing scarves",
-  "A mysterious glowing portal",
-  "A treehouse city",
-  "A steampunk airship",
-  "A coral reef teeming with life",
-  "A friendly alien visiting Earth"
-];
-
-const STYLES = [
-  "in the style of a 1980s anime",
-  "made entirely of origami paper",
-  "as a hyper-realistic oil painting from the 1700s",
-  "in the style of Minecraft / Voxel art",
-  "drawn on a crumpled napkin with a blue ballpoint pen",
-  "as a high-fashion magazine cover",
-  "in a vibrant cyberpunk neon aesthetic",
-  "as a Studio Ghibli watercolor background",
-  "in a bold Pop Art style",
-  "as a detailed charcoal sketch",
-  "in a minimalist line art style",
-  "as a 3D claymation scene",
-  "in the style of a classic comic book",
-  "as a stained glass window",
-  "in a dreamy impressionist style",
-  "as a retro 8-bit pixel art piece",
-  "in a dark gothic aesthetic",
-  "as a futuristic holographic projection",
-  "in a whimsical storybook illustration style",
-  "as a cinematic movie poster"
-];
-
-const TWISTS = [
-  "but it's all underwater",
-  "as a blueprint or technical schematic",
-  "embroidered as a patch on a denim jacket",
-  "in the middle of a dusty sandstorm",
-  "but everything is made of candy",
-  "seen through a night-vision camera",
-  "glitchy and distorted like a broken TV",
-  "contained inside a tiny snow globe",
-  "made entirely of liquid gold",
-  "as a miniature diorama on a desk",
-  "surrounded by floating geometric shapes",
-  "illuminated by a thousand fireflies",
-  "frozen in a block of ice",
-  "with a reflection in a puddle",
-  "emerging from a cloud of colorful smoke",
-  "as if seen through a kaleidoscope",
-  "with a double exposure effect",
-  "in a world where gravity is reversed",
-  "made of glowing fiber-optic cables",
-  "as a constellation in the night sky"
-];
-
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { PAGES } from './constants';
 
 export default function App() {
-  const [subject, setSubject] = useState(SUBJECTS[0]);
-  const [style, setStyle] = useState(STYLES[0]);
-  const [twist, setTwist] = useState(TWISTS[0]);
-  const [styleEnabled, setStyleEnabled] = useState(true);
-  const [twistEnabled, setTwistEnabled] = useState(true);
+  const [pageId, setPageId] = useState(PAGES[0].id);
+  const currentPage = useMemo(() => PAGES.find(p => p.id === pageId) || PAGES[0], [pageId]);
+
+  const [b1, setB1] = useState('');
+  const [b2, setB2] = useState('');
+  const [b3, setB3] = useState('');
+  const [b2Enabled, setB2Enabled] = useState(true);
+  const [b3Enabled, setB3Enabled] = useState(true);
   const [copied, setCopied] = useState(false);
 
-  const randomizeSubject = useCallback(() => {
-    const currentIndex = SUBJECTS.indexOf(subject);
-    let nextIndex;
+  const randomizeB1 = useCallback(() => {
+    const options = currentPage.buckets[0].options;
+    let next;
     do {
-      nextIndex = Math.floor(Math.random() * SUBJECTS.length);
-    } while (nextIndex === currentIndex && SUBJECTS.length > 1);
-    setSubject(SUBJECTS[nextIndex]);
-  }, [subject]);
+      next = options[Math.floor(Math.random() * options.length)];
+    } while (next === b1 && options.length > 1);
+    setB1(next);
+  }, [b1, currentPage]);
 
-  const randomizeStyle = useCallback(() => {
-    if (!styleEnabled) return;
-    const currentIndex = STYLES.indexOf(style);
-    let nextIndex;
+  const randomizeB2 = useCallback(() => {
+    if (!b2Enabled) return;
+    const options = currentPage.buckets[1].options;
+    let next;
     do {
-      nextIndex = Math.floor(Math.random() * STYLES.length);
-    } while (nextIndex === currentIndex && STYLES.length > 1);
-    setStyle(STYLES[nextIndex]);
-  }, [style, styleEnabled]);
+      next = options[Math.floor(Math.random() * options.length)];
+    } while (next === b2 && options.length > 1);
+    setB2(next);
+  }, [b2, b2Enabled, currentPage]);
 
-  const randomizeTwist = useCallback(() => {
-    if (!twistEnabled) return;
-    const currentIndex = TWISTS.indexOf(twist);
-    let nextIndex;
+  const randomizeB3 = useCallback(() => {
+    if (!b3Enabled) return;
+    const options = currentPage.buckets[2].options;
+    let next;
     do {
-      nextIndex = Math.floor(Math.random() * TWISTS.length);
-    } while (nextIndex === currentIndex && TWISTS.length > 1);
-    setTwist(TWISTS[nextIndex]);
-  }, [twist, twistEnabled]);
+      next = options[Math.floor(Math.random() * options.length)];
+    } while (next === b3 && options.length > 1);
+    setB3(next);
+  }, [b3, b3Enabled, currentPage]);
 
   const randomizeAll = useCallback(() => {
-    randomizeSubject();
-    if (styleEnabled) randomizeStyle();
-    if (twistEnabled) randomizeTwist();
-  }, [randomizeSubject, randomizeStyle, randomizeTwist, styleEnabled, twistEnabled]);
+    const options1 = currentPage.buckets[0].options;
+    const options2 = currentPage.buckets[1].options;
+    const options3 = currentPage.buckets[2].options;
+    
+    setB1(options1[Math.floor(Math.random() * options1.length)]);
+    if (b2Enabled) setB2(options2[Math.floor(Math.random() * options2.length)]);
+    if (b3Enabled) setB3(options3[Math.floor(Math.random() * options3.length)]);
+  }, [currentPage, b2Enabled, b3Enabled]);
 
-  const fullPrompt = `Generate ${subject}${styleEnabled ? `, ${style}` : ''}${twistEnabled ? `, ${twist}` : ''}.`;
+  const fullPrompt = currentPage.id === 'creative' 
+    ? `${currentPage.promptPrefix} ${b1}${b2Enabled ? `, ${b2}` : ''}${b3Enabled ? ` ${b3}` : ''}.`
+    : `${currentPage.promptPrefix} ${b1}${b2Enabled ? ` The brand vibe is ${b2.toLowerCase().replace('.', '')}.` : ''}${b3Enabled ? ` The secret sauce is that ${b3.charAt(0).toLowerCase() + b3.slice(1).replace('.', '')}.` : ''} Give me 3 crazy product ideas.`;
 
   const copyToClipboard = async () => {
     try {
@@ -151,64 +78,83 @@ export default function App() {
     }
   };
 
-  // Initial randomization on load
+  // Reset and randomize when page changes
   useEffect(() => {
     randomizeAll();
-  }, []);
+  }, [pageId]);
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background text-foreground font-sans p-4 md:p-10 flex flex-col w-full max-w-[1024px] mx-auto">
+      <div 
+        className="min-h-screen bg-background text-foreground font-sans p-4 md:p-10 flex flex-col w-full max-w-[1024px] mx-auto transition-colors duration-500"
+        style={{ '--primary': currentPage.primaryColor } as React.CSSProperties}
+      >
         
         {/* Header */}
         <header className="flex flex-wrap justify-between items-end mb-10 border-b-2 border-foreground pb-3 gap-4">
-          <h1 className="text-2xl md:text-[42px] font-black uppercase tracking-tighter leading-none break-words">
-            PROMPT LAB
-          </h1>
-          <div className="font-mono text-sm font-bold uppercase">
-            V.01 // HIGH SCHOOL CREATIVE SUITE
+          <div>
+            <h1 className="text-2xl md:text-[42px] font-black uppercase tracking-tighter leading-none break-words">
+              PROMPT LAB
+            </h1>
+            <div className="font-mono text-sm font-bold uppercase">
+              {currentPage.version} // {currentPage.name}
+            </div>
+          </div>
+
+          {/* Navigation Dropdown */}
+          <div className="relative group">
+            <select 
+              value={pageId}
+              onChange={(e) => setPageId(e.target.value)}
+              className="appearance-none bg-foreground text-white px-4 py-2 pr-10 font-bold text-xs uppercase rounded-none cursor-pointer border-none focus:ring-2 focus:ring-primary outline-none"
+            >
+              {PAGES.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none" />
           </div>
         </header>
 
         {/* Main Buckets */}
         <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
           
-          {/* Bucket 1: Subject */}
           <BucketCard 
-            id="01"
-            title="SUBJECT_DATA" 
-            value={subject}
-            onRandomize={randomizeSubject}
-            btnLabel="ROLL SUBJECT"
+            id={currentPage.buckets[0].id}
+            title={currentPage.buckets[0].title} 
+            value={b1}
+            onRandomize={randomizeB1}
+            btnLabel={currentPage.buckets[0].btnLabel}
             enabled={true}
+            primaryColor={currentPage.primaryColor}
           />
 
-          {/* Bucket 2: Style */}
           <BucketCard 
-            id="02"
-            title="STYLE_DATA" 
-            value={style}
-            onRandomize={randomizeStyle}
-            btnLabel="ROLL STYLE"
-            enabled={styleEnabled}
-            onToggle={setStyleEnabled}
+            id={currentPage.buckets[1].id}
+            title={currentPage.buckets[1].title} 
+            value={b2}
+            onRandomize={randomizeB2}
+            btnLabel={currentPage.buckets[1].btnLabel}
+            enabled={b2Enabled}
+            onToggle={setB2Enabled}
+            primaryColor={currentPage.primaryColor}
           />
 
-          {/* Bucket 3: Twist */}
           <BucketCard 
-            id="03"
-            title="TWIST_DATA" 
-            value={twist}
-            onRandomize={randomizeTwist}
-            btnLabel="ROLL TWIST"
-            enabled={twistEnabled}
-            onToggle={setTwistEnabled}
+            id={currentPage.buckets[2].id}
+            title={currentPage.buckets[2].title} 
+            value={b3}
+            onRandomize={randomizeB3}
+            btnLabel={currentPage.buckets[2].btnLabel}
+            enabled={b3Enabled}
+            onToggle={setB3Enabled}
+            primaryColor={currentPage.primaryColor}
           />
 
         </main>
 
         {/* Footer Bar */}
-        <div className="mt-10 bg-foreground text-white p-8 flex flex-col gap-4 shadow-brutal">
+        <div className="mt-10 bg-foreground text-white p-8 flex flex-col gap-4 shadow-brutal transition-shadow duration-300">
           <div className="font-mono text-[11px] tracking-[2px] opacity-60 uppercase">
             COMPILED_OUTPUT_PROMPT:
           </div>
@@ -222,19 +168,69 @@ export default function App() {
               transition={{ duration: 0.3 }}
               className="text-xl font-normal leading-relaxed"
             >
-              "{fullPrompt.replace('Generate ', 'Generate ').replace(subject, '')} 
-              <span className="text-[#6E7BFF] font-bold underline">{subject}</span>
-              {styleEnabled && (
+              {currentPage.id === 'creative' ? (
                 <>
-                  , <span className="text-[#6E7BFF] font-bold underline">{style}</span>
+                  "{currentPage.promptPrefix} "
+                  <span 
+                    className="font-bold underline transition-colors duration-300"
+                    style={{ color: currentPage.highlightColor }}
+                  >
+                    {b1}
+                  </span>
+                  {b2Enabled && (
+                    <>
+                      , <span 
+                        className="font-bold underline transition-colors duration-300"
+                        style={{ color: currentPage.highlightColor }}
+                      >
+                        {b2}
+                      </span>
+                    </>
+                  )}
+                  {b3Enabled && (
+                    <>
+                      , <span 
+                        className="font-bold underline transition-colors duration-300"
+                        style={{ color: currentPage.highlightColor }}
+                      >
+                        {b3}
+                      </span>
+                    </>
+                  )}
+                  ."
+                </>
+              ) : (
+                <>
+                  "{currentPage.promptPrefix} "
+                  <span 
+                    className="font-bold underline transition-colors duration-300"
+                    style={{ color: currentPage.highlightColor }}
+                  >
+                    {b1}
+                  </span>
+                  {b2Enabled && (
+                    <>
+                      . The brand vibe is <span 
+                        className="font-bold underline transition-colors duration-300"
+                        style={{ color: currentPage.highlightColor }}
+                      >
+                        {b2.toLowerCase().replace('.', '')}
+                      </span>
+                    </>
+                  )}
+                  {b3Enabled && (
+                    <>
+                      . The secret sauce is that <span 
+                        className="font-bold underline transition-colors duration-300"
+                        style={{ color: currentPage.highlightColor }}
+                      >
+                        {b3.charAt(0).toLowerCase() + b3.slice(1).replace('.', '')}
+                      </span>
+                    </>
+                  )}
+                  . Give me 3 crazy product ideas."
                 </>
               )}
-              {twistEnabled && (
-                <>
-                  , <span className="text-[#6E7BFF] font-bold underline">{twist}</span>
-                </>
-              )}
-              ."
             </motion.p>
           </AnimatePresence>
 
@@ -268,19 +264,22 @@ interface BucketCardProps {
   btnLabel: string;
   enabled: boolean;
   onToggle?: (enabled: boolean) => void;
+  primaryColor: string;
 }
 
-function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle }: BucketCardProps) {
+function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle, primaryColor }: BucketCardProps) {
   return (
     <div className={cn(
       "bg-white border-2 border-foreground shadow-brutal flex flex-col p-6 relative group transition-opacity duration-300 min-w-0",
       !enabled && "opacity-50"
     )}>
       {/* Geometric Decoration */}
-      <div className={cn(
-        "absolute -top-[2px] -right-[2px] w-10 h-10 clip-triangle z-10 transition-colors duration-300",
-        enabled ? "bg-primary" : "bg-muted-foreground"
-      )} />
+      <div 
+        className={cn(
+          "absolute -top-[2px] -right-[2px] w-10 h-10 clip-triangle z-10 transition-colors duration-300"
+        )} 
+        style={{ backgroundColor: enabled ? primaryColor : '#9CA3AF' }}
+      />
       
       <div className="font-mono text-xs uppercase mb-6 flex flex-wrap items-center justify-between gap-2 font-bold">
         <div className="flex items-center gap-2">
@@ -289,16 +288,19 @@ function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle
         </div>
         {onToggle && (
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className={cn(
-              "text-[10px] font-bold tracking-widest transition-colors duration-300",
-              enabled ? "text-primary" : "text-muted-foreground"
-            )}>
+            <span 
+              className={cn(
+                "text-[10px] font-bold tracking-widest transition-colors duration-300"
+              )}
+              style={{ color: enabled ? primaryColor : '#9CA3AF' }}
+            >
               {enabled ? "ACTIVE" : "INACTIVE"}
             </span>
             <Switch 
               checked={enabled} 
               onCheckedChange={onToggle}
-              className="data-[state=checked]:bg-primary"
+              style={{ '--primary': primaryColor } as React.CSSProperties}
+              className="data-checked:bg-[var(--primary)]"
             />
           </div>
         )}
@@ -316,7 +318,8 @@ function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
               transition={{ duration: 0.2 }}
-              className="text-2xl font-bold leading-tight text-primary"
+              className="text-2xl font-bold leading-tight"
+              style={{ color: primaryColor }}
             >
               {value}
             </motion.p>
@@ -330,9 +333,15 @@ function BucketCard({ id, title, value, onRandomize, btnLabel, enabled, onToggle
         onClick={onRandomize}
         disabled={!enabled}
         className={cn(
-          "bg-foreground text-white border-none p-4 h-auto font-black uppercase text-[13px] tracking-wider rounded-none transition-colors duration-200",
-          enabled ? "hover:bg-primary" : "opacity-50 cursor-not-allowed"
+          "bg-foreground text-white border-none p-4 h-auto font-black uppercase text-[13px] tracking-wider rounded-none transition-colors duration-200"
         )}
+        style={{ backgroundColor: enabled ? undefined : '#9CA3AF' }}
+        onMouseEnter={(e) => {
+          if (enabled) e.currentTarget.style.backgroundColor = primaryColor;
+        }}
+        onMouseLeave={(e) => {
+          if (enabled) e.currentTarget.style.backgroundColor = '';
+        }}
       >
         {btnLabel}
       </Button>
