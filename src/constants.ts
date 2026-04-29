@@ -141,5 +141,54 @@ export const PAGES: PageConfig[] = [
         ]
       }
     ]
+  },
+  {
+    id: 'stride',
+    name: 'PROBLEM RANDOMIZER',
+    version: 'V.03',
+    primaryColor: '#EA580C', // Orange 600
+    highlightColor: '#F97316', // Orange 500
+    promptPrefix: 'Act as',
+    buckets: [
+      {
+        id: '01',
+        title: 'IMPOSSIBLE_PROBLEM',
+        btnLabel: 'ROLL PROBLEM',
+        options: [
+          "Plan an epic, interactive graduation party... that takes place entirely in Virtual Reality",
+          "Design a completely new, cheat-proof grading system for high schools",
+          "Invent a logistics network that delivers a hot, perfectly cooked pizza to 1,000 different students' physical houses at the exact same second",
+          "Design a new way to play multiplayer video games now that the world’s internet has been permanently slowed down to 1990s dial-up speeds",
+          "Invent a new e-sports tournament that gives everyone (even terrible gamers) an equal chance to win",
+          "Plan a massive summer road trip for 500 students"
+        ]
+      },
+      {
+        id: '02',
+        title: 'THE_CONSTRAINT',
+        btnLabel: 'ROLL CONSTRAINT',
+        options: [
+          "your total budget is exactly $0",
+          "the entire plan must be executed in under 4 hours",
+          "the internet goes down every 10 minutes",
+          "it must rely entirely on renewable, eco-friendly energy",
+          "you are only allowed to communicate using emojis",
+          "you have to incorporate 50 angry, loose geese into the plan"
+        ]
+      },
+      {
+        id: '03',
+        title: 'AI_PERSONA',
+        btnLabel: 'ROLL PERSONA',
+        options: [
+          "a highly logical robot who hates fun",
+          "a chaotic evil supervillain who loves explosions",
+          "an overly enthusiastic game show host",
+          "a stressed-out Hollywood event planner",
+          "a medieval knight who doesn't understand modern technology",
+          "a sarcastic teenager who thinks everything is boring"
+        ]
+      }
+    ]
   }
 ];

@@ -64,9 +64,15 @@ export default function App() {
     if (b3Enabled) setB3(options3[Math.floor(Math.random() * options3.length)]);
   }, [currentPage, b2Enabled, b3Enabled]);
 
-  const fullPrompt = currentPage.id === 'creative' 
-    ? `${currentPage.promptPrefix} ${b1}${b2Enabled ? `, ${b2}` : ''}${b3Enabled ? ` ${b3}` : ''}.`
-    : `${currentPage.promptPrefix} ${b1}${b2Enabled ? ` The brand vibe is ${b2.toLowerCase().replace('.', '')}.` : ''}${b3Enabled ? ` The secret sauce is that ${b3.charAt(0).toLowerCase() + b3.slice(1).replace('.', '')}.` : ''} Give me 3 crazy product ideas.`;
+  const fullPrompt = useMemo(() => {
+    if (currentPage.id === 'creative') {
+      return `${currentPage.promptPrefix} ${b1}${b2Enabled ? `, ${b2}` : ''}${b3Enabled ? ` ${b3}` : ''}.`;
+    } else if (currentPage.id === 'stride') {
+      return `${currentPage.promptPrefix} ${b3Enabled ? b3 : 'an expert'}. Your task is to ${b1.charAt(0).toLowerCase() + b1.slice(1)}${b2Enabled ? `, but ${b2}` : ''}.`;
+    } else {
+      return `${currentPage.promptPrefix} ${b1}${b2Enabled ? ` The brand vibe is ${b2.toLowerCase().replace('.', '')}.` : ''}${b3Enabled ? ` The secret sauce is that ${b3.charAt(0).toLowerCase() + b3.slice(1).replace('.', '')}.` : ''} Give me 3 crazy product ideas.`;
+    }
+  }, [currentPage, b1, b2, b3, b2Enabled, b3Enabled]);
 
   const copyToClipboard = async () => {
     try {
@@ -194,6 +200,34 @@ export default function App() {
                         style={{ color: currentPage.highlightColor }}
                       >
                         {b3}
+                      </span>
+                    </>
+                  )}
+                  ."
+                </>
+              ) : currentPage.id === 'stride' ? (
+                <>
+                  "{currentPage.promptPrefix} "
+                  <span 
+                    className="font-bold underline transition-colors duration-300"
+                    style={{ color: currentPage.highlightColor }}
+                  >
+                    {b3Enabled ? b3 : 'an expert'}
+                  </span>
+                  ". Your task is to "
+                  <span 
+                    className="font-bold underline transition-colors duration-300"
+                    style={{ color: currentPage.highlightColor }}
+                  >
+                    {b1.charAt(0).toLowerCase() + b1.slice(1)}
+                  </span>
+                  {b2Enabled && (
+                    <>
+                      , but <span 
+                        className="font-bold underline transition-colors duration-300"
+                        style={{ color: currentPage.highlightColor }}
+                      >
+                        {b2}
                       </span>
                     </>
                   )}
